@@ -5,15 +5,7 @@ import sys
 import string
 import re
 
-sentiment_file_path ='AFINN-111.txt'
-
-def hw():
-    print 'Hello, world!'
-
-def lines(fp):
-    print str(len(fp.readlines()))
-
-def get_sentiment_dict(sentiment_file_path)
+def get_sentiment_dict(sentiment_file_path):
     sentiment_file = open(sentiment_file_path,'r')
     sentiment_dict = dict()
     for line in sentiment_file.readlines():
@@ -24,30 +16,30 @@ def get_sentiment_dict(sentiment_file_path)
             sentiment_dict[line_sp[0]] = 0
     return sentiment_dict
 
+def get_sentiment_score(text_parsed,sentiment_dict):
+    tot_sentiment = 0.0
+    for word in text_parsed:
+        try:
+            tot_sentiment += sentiment_dict[word]
+        except KeyError:
+            tot_sentiment += 0.0
+    return tot_sentiment
     
 def main():
-    sent_file = open(sys.argv[1])
-    tweet_file = open(sys.argv[2])
-    hw()
-    lines(sent_file)
-    lines(tweet_file)
+    sentiment_file_path = (sys.argv[1])
+    tweet_file_path     = (sys.argv[2])
 
-##if __name__ == '__main__':
-##    main()
+    data = open(tweet_file_path,'r')
+    sentiment_dict = get_sentiment_dict(sentiment_file_path)
 
-data = open("outputtop20.txt",'r')
+    for line in data.readlines():
+        tweet = json.loads(line[:-1],encoding='utf-8')
+        try:
+            tweet_text = tweet['text']
+        except KeyError:
+            tweet_text = ""    
+        text_parsed = re.sub('[^A-Za-z0-9 ]+','',tweet_text).lower().split(" ")
+        print get_sentiment_score(text_parsed,sentiment_dict)
 
-sentiment_dict = get_sentiment_dict(sentiment_file_path)
-
-for line in data.readlines():
-    tweet = json.loads(line[:-1],encoding='utf-8')
-    try:
-        tweet_text = tweet['text']
-    except KeyError:
-        tweet_text = ""    
-    text_parsed = re.sub('[^A-Za-z0-9 ]+','',tweet_text).lower().split(" ")
-
-tot_sentiment = 0
-for word in text_parsed:
-    tot_sentiment += sentiment_dict[word]
-
+if __name__ == '__main__':
+    main()
