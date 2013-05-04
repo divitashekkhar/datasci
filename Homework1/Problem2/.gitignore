@@ -1,0 +1,7 @@
+# JSON file consists of my settings
+
+*.JSON
+
+# Cumbersome output from python script which I do not need to track, but still use in this assigment
+
+output.txt
