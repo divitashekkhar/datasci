@@ -24,6 +24,15 @@ def get_sentiment_score(text_parsed,sentiment_dict):
         except KeyError:
             tot_sentiment += 0.0
     return tot_sentiment
+
+def parse_tweet_text(line):
+    tweet = json.loads(line[:-1],encoding='utf-8')
+    try:
+        tweet_text = tweet['text']
+    except KeyError:
+        tweet_text = ""    
+    text_parsed = re.sub('[^A-Za-z0-9 ]+','',tweet_text).lower().split(" ")
+    return text_parsed
     
 def main():
     sentiment_file_path = (sys.argv[1])
@@ -33,12 +42,7 @@ def main():
     sentiment_dict = get_sentiment_dict(sentiment_file_path)
 
     for line in data.readlines():
-        tweet = json.loads(line[:-1],encoding='utf-8')
-        try:
-            tweet_text = tweet['text']
-        except KeyError:
-            tweet_text = ""    
-        text_parsed = re.sub('[^A-Za-z0-9 ]+','',tweet_text).lower().split(" ")
+        text_parsed = parse_tweet_text(line)
         print get_sentiment_score(text_parsed,sentiment_dict)
 
 if __name__ == '__main__':
