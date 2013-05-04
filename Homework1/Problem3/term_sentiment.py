@@ -32,7 +32,29 @@ data = open('outputtop20.txt','r')
 
 sentiment_dict = get_sentiment_dict(sent_file_path)
 
+tweets_scored = []
+terms_all = []
+
 for line in data.readlines():
     text_parsed = parse_tweet_text(line)
-    score = get_sentiment_score(text_parsed,sentiment_dict)
-    print score
+    for word in text_parsed:
+        terms_all.append(word)
+    score = get_sentiment_score(text_parsed,sentiment_dict)   
+    tweets_scored.append( (text_parsed, score) )
+
+terms_all = set(terms_all)
+terms_old = [key for key in sentiment_dict]
+terms_new = terms_all.difference(terms_old)
+terms = { item: [0,0] for item in terms_new} 
+
+for tweet in tweets_scored:
+    for word in tweet[0]:
+        try:
+            terms[word][0] += tweet[1]
+            terms[word][1] += 1
+        except KeyError:
+            pass
+
+for key in terms:
+    term_sentiment = terms[key][0]/terms[key][1]
+    print key , term_sentiment 
