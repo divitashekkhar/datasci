@@ -56,6 +56,7 @@ def main():
     terms_new = exclude_old_terms(terms_all,sentiment_dict)
     res = score_terms(terms_new, tweets_scored)
 
+    del res['']
     for key in res:
         print key, res[key]
                      

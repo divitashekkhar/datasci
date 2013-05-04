@@ -1,3 +1,7 @@
 # Python compiled
 
 *.pyc
+
+# Cubersome data
+
+output.txt
