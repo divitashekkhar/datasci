@@ -11,50 +11,45 @@ from tweet_sentiment import get_sentiment_score
 from tweet_sentiment import get_sentiment_dict
 from tweet_sentiment import parse_tweet_text
 
-def hw():
-    print 'Hello, world!'
+def get_all_tweets_scored_and_terms_used(tweet_file_path, sentiment_dict):
+    tweets_scored = []
+    terms_all = []
+    data = open(tweet_file_path,'r')
+    for line in data.readlines():
+        text_parsed = parse_tweet_text(line)
+        for word in text_parsed:
+            terms_all.append(word)
+            score = get_sentiment_score(text_parsed,sentiment_dict)   
+        tweets_scored.append( (text_parsed, score) )
+    return ( tweets_scored, terms_all )
 
-def lines(fp):
-    print str(len(fp.readlines()))
+def main():
+    sent_file_path = (sys.argv[1])
+    tweet_file_path = (sys.argv[2])
 
-##def main():
-##    sent_file = open(sys.argv[1])
-##    tweet_file = open(sys.argv[2])
-##    hw()
-##    lines(sent_file)
-##    lines(tweet_file)
+    sentiment_dict = get_sentiment_dict(sent_file_path)
 
-##if __name__ == '__main__':
-##    main()
+    tweets_and_terms = get_all_tweets_scored_and_terms_used(tweet_file_path, sentiment_dict)
 
-sent_file_path = 'AFINN-111.txt'
-data = open('outputtop20.txt','r')
+    tweets_scored = tweets_and_terms[0]
+    terms_all = tweets_and_terms[1]
 
-sentiment_dict = get_sentiment_dict(sent_file_path)
+    terms_all = set(terms_all)
+    terms_old = [key for key in sentiment_dict]
+    terms_new = terms_all.difference(terms_old)
+    terms = { item: [0,0] for item in terms_new} 
 
-tweets_scored = []
-terms_all = []
+    for tweet in tweets_scored:
+        for word in tweet[0]:
+            try:
+                terms[word][0] += tweet[1]
+                terms[word][1] += 1
+            except KeyError:
+                pass
 
-for line in data.readlines():
-    text_parsed = parse_tweet_text(line)
-    for word in text_parsed:
-        terms_all.append(word)
-    score = get_sentiment_score(text_parsed,sentiment_dict)   
-    tweets_scored.append( (text_parsed, score) )
+    for key in terms:
+        term_sentiment = terms[key][0]/terms[key][1]
+        print key , term_sentiment 
 
-terms_all = set(terms_all)
-terms_old = [key for key in sentiment_dict]
-terms_new = terms_all.difference(terms_old)
-terms = { item: [0,0] for item in terms_new} 
-
-for tweet in tweets_scored:
-    for word in tweet[0]:
-        try:
-            terms[word][0] += tweet[1]
-            terms[word][1] += 1
-        except KeyError:
-            pass
-
-for key in terms:
-    term_sentiment = terms[key][0]/terms[key][1]
-    print key , term_sentiment 
+if __name__ == '__main__':
+    main()
