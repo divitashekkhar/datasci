@@ -31,7 +31,7 @@ def parse_tweet_text(line):
         tweet_text = tweet['text']
     except KeyError:
         tweet_text = ""    
-    text_parsed = re.sub('[^A-Za-z0-9 ]+','',tweet_text).lower().split(" ")
+    text_parsed = re.sub('[^A-Za-z0-9 ]+','',tweet_text).lower.split(" ")
     return text_parsed
     
 def main():
