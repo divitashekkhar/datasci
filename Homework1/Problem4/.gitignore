@@ -1,0 +1,9 @@
+# Python compiled
+
+*.pyc
+
+# Cubersome data
+
+output.txt
+outputtop20.txt
+results.txt
