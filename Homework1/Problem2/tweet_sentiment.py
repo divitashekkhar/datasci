@@ -33,6 +33,12 @@ def parse_tweet_text(line):
         tweet_text = ""    
     text_parsed = re.sub('[^A-Za-z0-9 ]+','',tweet_text).lower().split(" ")
     return text_parsed
+
+def is_tweet_deleted(line):
+    tweet = json.loads(line[:-1],encoding='utf-8')
+    if 'delete' in tweet:
+        return True
+    return False
     
 def main():
     sentiment_file_path = (sys.argv[1])
@@ -42,6 +48,8 @@ def main():
     sentiment_dict = get_sentiment_dict(sentiment_file_path)
 
     for line in data.readlines():
+        if is_tweet_deleted(line):
+            continue         
         text_parsed = parse_tweet_text(line)
         print get_sentiment_score(text_parsed,sentiment_dict)
 
