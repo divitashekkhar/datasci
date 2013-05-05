@@ -30,6 +30,12 @@ def get_terms_used(tweets):
 def count_terms(terms,tweets_parsed):
     terms_observed = { item: 0.0 for item in terms}
     tot_count = 0.0
+    
+    try:
+        del terms_observed['']
+    except:
+        pass
+
     for word in tweets_parsed:
         try:
             terms_observed[word] += 1
@@ -49,11 +55,6 @@ def main():
 
     res = count_terms(terms_all, tweets_parsed)
 
-    try:
-        del res['']
-    except:
-        pass
-    
     for key in res:
         print key, res[key]
 
