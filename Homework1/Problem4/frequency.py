@@ -20,27 +20,22 @@ def get_tweets_parsed(tweet_file_path):
     data = open(tweet_file_path,'r')
     for line in data.readlines():
         text_parsed = parse_tweet_text(line)
-        tweets_parsed.append( text_parsed )
+        tweets_parsed.extend( text_parsed )
     return tweets_parsed
 
 def get_terms_used(tweets):
-    terms_all = []
-    for tweet in tweets:
-        for word in tweet[0]:
-            terms_all.append(word)
-    terms_used = set(terms_all)
+    terms_used = set(tweets)
     return terms_used
 
 def count_terms(terms,tweets_parsed):
     terms_observed = { item: 0.0 for item in terms}
     tot_count = 0.0
-    for tweet in tweets_parsed:
-        for word in tweet:
-            try:
-                terms_observed[word] += 1
-                tot_count += 1
-            except KeyError:
-                pass
+    for word in tweets_parsed:
+        try:
+            terms_observed[word] += 1
+            tot_count += 1
+        except KeyError:
+            pass
     terms_frequency = { key:  terms_observed[key]/tot_count for key in terms_observed }
     return terms_frequency
     
