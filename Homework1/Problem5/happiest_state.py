@@ -57,8 +57,10 @@ def main():
 
     for line in data.readlines():
         text_parsed, tweet_location = parse_tweet_text(line)
-        print tweet_location.encode("utf-8")
-        print get_sentiment_score(text_parsed,sentiment_dict)
+        tweet_location = tweet_location.encode("utf-8")
+        if len(tweet_location) > 1:
+            print tweet_location
+            print get_sentiment_score(text_parsed,sentiment_dict)
 
 if __name__ == '__main__':
     main()
