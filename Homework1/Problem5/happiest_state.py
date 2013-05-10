@@ -27,12 +27,26 @@ def get_sentiment_score(text_parsed,sentiment_dict):
 
 def parse_tweet_text(line):
     tweet = json.loads(line[:-1],encoding='utf-8')
+
+    try:
+        if tweet['lang']<>'en':
+            return '',''
+    except KeyError:
+        return '',''
+    
     try:
         tweet_text = tweet['text']
     except KeyError:
         tweet_text = ""    
     text_parsed = re.sub('[^A-Za-z0-9 ]+','',tweet_text).lower().split(" ")
-    return text_parsed
+
+    try:
+        tweet_location = tweet['user']["location"]
+        tweet_location.encode("utf-8")
+    except KeyError:
+        tweet_location = ""
+
+    return text_parsed, tweet_location
     
 def main():
     sentiment_file_path = (sys.argv[1])
@@ -42,7 +56,8 @@ def main():
     sentiment_dict = get_sentiment_dict(sentiment_file_path)
 
     for line in data.readlines():
-        text_parsed = parse_tweet_text(line)
+        text_parsed, tweet_location = parse_tweet_text(line)
+        print tweet_location.encode("utf-8")
         print get_sentiment_score(text_parsed,sentiment_dict)
 
 if __name__ == '__main__':
