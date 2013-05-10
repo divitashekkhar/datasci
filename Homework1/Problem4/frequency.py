@@ -12,7 +12,7 @@ def parse_tweet_text(line):
         tweet_text = tweet['text']
     except KeyError:
         tweet_text = ""    
-    text_parsed = re.sub('[^A-Za-z0-9 ]+','',tweet_text).lower().split(" ")
+    text_parsed = re.sub('[^A-Za-z0-9 ]+','',tweet_text).split(" ")
     return [word for word in text_parsed if len(word)>2 ]
 
 def get_tweets_parsed(tweet_file_path):
