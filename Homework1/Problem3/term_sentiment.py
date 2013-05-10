@@ -32,7 +32,7 @@ def parse_tweet_text(line):
         tweet_text = tweet['text']
     except KeyError:
         tweet_text = ""    
-    text_parsed = re.sub('[^A-Za-z0-9 @]+','',tweet_text).lower().split(" ")
+    text_parsed = re.sub('[^A-Za-z0-9 @]+','',tweet_text).split(" ")
     return text_parsed
 
 def get_tweets_scored(tweet_file_path, sentiment_dict):
@@ -63,7 +63,7 @@ def exclude_old_terms(terms,sentiment_dict):
     return terms_new   
 
 def score_terms(terms,tweets_scored):
-    terms_observed = { item: [0,0] for item in terms} 
+    terms_observed = { item: [0,0] for item in terms if len(item) > 2} 
     for tweet in tweets_scored:
         for word in tweet[0]:
             try:
