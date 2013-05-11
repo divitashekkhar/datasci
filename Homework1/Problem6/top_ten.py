@@ -1,10 +1,11 @@
-'''Problem 4: Compute Term Frequency
-Write a Python script, frequency.py, to compute the term frequency histogram of the livestream data you harvested from Problem 1.'''
+'''Problem 6: '''
 
 import sys
 import re
 import string
 import json
+
+N_MOST_POPULAR = 10
 
 def parse_tweet_text(line):
     tweet = json.loads(line[:-1],encoding='utf-8')
@@ -58,10 +59,14 @@ def main():
 
     tags_all = get_tags_used(tweets_parsed)
 
-    res = count_tags(tags_all, tweets_parsed)
+    tags_counted = count_tags(tags_all, tweets_parsed)
 
-    for key in res:
-        print key, res[key]
+    res_unsorted = [  (tag, tags_counted[tag]) for tag in tags_counted ]
+
+    res_sorted=sorted(res_unsorted, key = lambda x: x[1], reverse=True)
+    
+    for i in range(N_MOST_POPULAR):
+        print res_sorted[i][0], res_sorted[i][1]
 
 if __name__ == '__main__':
     main()
