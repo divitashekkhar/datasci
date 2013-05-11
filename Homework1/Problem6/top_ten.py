@@ -8,26 +8,25 @@ import json
 
 def parse_tweet_text(line):
     tweet = json.loads(line[:-1],encoding='utf-8')
-    res = []
+    res =[]
     try:
         tags = tweet['entities']['hashtags']
-        if len(tags) == 0:
-            return res
-        else:
-            for tag in tags:
-                res.append( tag['text'] )
     except KeyError:
         return res
+
+    for tag in tags:
+        res.append( tag['text'].encode('utf-8')  )
+
+    return res
+
 
 def get_tweets_parsed(tweet_file_path):
     tweets_parsed = []
     data = open(tweet_file_path,'r')
     for line in data.readlines():
         tags = parse_tweet_text(line)
-        try:
+        if len(tags) > 0:
             tweets_parsed.extend( tags )
-        except TypeError:
-            pass
     return tweets_parsed
 
 def get_tags_used(tweets):
