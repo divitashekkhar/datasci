@@ -1,5 +1,8 @@
 -- adding bag-of-words represeenation of query into temporary table
 
+--if exists (SELECT * FROM sqlite_master WHERE name ='temp_1' and type='table') 
+--    drop table temp_1;
+     
 CREATE TABLE temp_1 (
 docid VARCHAR(255),
 term VARCHAR(255),
@@ -21,6 +24,9 @@ SELECT 'q' as docid, 'treasury' as term, 1 as [count]
 );
 
 -- computing similarity score between query and all other documents
+--if exists (SELECT * FROM sqlite_master WHERE name ='temp_2' and type='table') 
+--    drop table temp_2;
+
 CREATE TABLE temp_2 (
 docid VARCHAR(255),
 score int);
@@ -38,12 +44,10 @@ group by
     B.docid
     ;
 
--- returning top N results for our query
-Select *
+-- returning maximum similarity score for our query
+Select max(score)
 from
-    temp_2
-order by score desc
-limit 10;
+    temp_2;
 
 --cleaning up
 drop table temp_1;
