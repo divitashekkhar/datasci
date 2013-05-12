@@ -9,12 +9,9 @@ SELECT
 from
     frequency A
     join frequency B on A.term=B.term
-where A.docid < B.docid
+where  A.docid = '10080_txt_crude' and B.docid = '17035_txt_earn'
 group by 
     A.docid,
     B.docid
-
 ) C
-
-where  C.doc1 = '10080_txt_crude' and C.doc2 = '17035_txt_earn'    
 ;
