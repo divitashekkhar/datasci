@@ -23,24 +23,19 @@ def mapper(record):
         'a' indicates that the record is from matrix A
         'b' indicates that the record is from matrix B
     '''
-    matrix = record[0]
-    row = record[1]
-    col = record[2]
-    value = record[3]
+    matrix, row, col, value = record
     
-    if matrix == 'a':
-        for n in range(N):
+    for n in range(N):
+        if matrix == 'a':
             destination_cell = (row,n)
             matrix_position = 'L'
             serial_number = col
-            mr.emit_intermediate( destination_cell, (matrix_position ,serial_number, value) )
-
-    if matrix == 'b':
-        for n in range(N):
+        else:
             destination_cell = (n,col)
             matrix_position = 'R'
             serial_number = row
-            mr.emit_intermediate( destination_cell, (matrix_position ,serial_number, value) )
+        mr.emit_intermediate( destination_cell, (matrix_position ,serial_number, value) )
+            
 
 def reducer(key, list_of_values):
     '''
