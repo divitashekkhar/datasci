@@ -1,4 +1,4 @@
-# -*- coding: cp1251 -*-
+
 '''
 MapReduce algorithm to count he number of friends each person has
 '''
@@ -16,14 +16,15 @@ def mapper(record):
         personB: Name of one of personA 's friends formatted as a string
     This implies that personB is a friend of personA, but it does not imply that personA is a friend of personB
     '''
-    mr.emit_intermediate()
+    person = record[0]
+    mr.emit_intermediate( person, 1)
 
-def reducer(key, list_of_values):
+def reducer(person, list_of_values):
     '''
     The output should be a (person,  friend count) tuple.
     person is a string and friend count is an integer describing the number of friends person has.
-    '''
-    mr.emit( res )
+    '''        
+    mr.emit( ( person, len(list_of_values)) )
 
 
 inputdata = open(sys.argv[1])
