@@ -23,8 +23,15 @@ def mapper(record):
 def reducer(key, list_of_values):
     '''
     The output should be a (word, document ID list) tuple where word is a String and document ID list is a list of Strings.
-    '''   
-    mr.emit( (key,list_of_values) )
+    '''     
+    result = []
+    
+    #want to remove duplicates
+    #might use set(), but got some bug which did not want to solve
+    for document_ID in list_of_values:
+        if document_ID not in result:
+            result.append(document_ID) 
+    mr.emit( (key,result) )
 
 
 inputdata = open(sys.argv[1])
